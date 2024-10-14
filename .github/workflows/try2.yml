@@ -18,7 +18,7 @@ jobs:
     steps:
       # Checkout: https://github.com/marketplace?type=actions:
       - name: Checkout
-        uses: actions/checkout@v4z
+        uses: actions/checkout@v4
 
       # Setup JAVA JDK: https://github.com/marketplace/actions/setup-java-jdk
       - name: Set up JDK 21
