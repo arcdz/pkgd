@@ -2,7 +2,7 @@ name: Docker - Build Spring Boot Image
 
 on:
   push:
-    branches: ['release']
+    branches: ['main']
 
 env:
   REGISTRY: ghcr.io
