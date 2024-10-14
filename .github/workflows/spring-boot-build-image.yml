@@ -22,7 +22,7 @@ jobs:
     steps:
       # Checkout: https://github.com/marketplace?type=actions:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4z
 
       ## JAVA & maven related:
       # Setup JAVA JDK: https://github.com/marketplace/actions/setup-java-jdk
@@ -31,10 +31,6 @@ jobs:
         with:
           distribution: 'temurin' # Alternative: 'zulu'
           java-version: '21'
-
-      # Build the project and create Docker image
-      - name: Build with Maven and create Docker image
-        run: mvn spring-boot:build-image
 
       # Docker Login: https://github.com/marketplace/actions/docker-login
       - name: Login to GitHub Container Registry
@@ -51,12 +47,19 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      # Build and push Docker images: https://github.com/marketplace/actions/build-and-push-docker-images
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      # Build the project and create Docker image
+      - name: Build with Maven and create Docker image
+        run: |
+          ./mvnw spring-boot:build-image
+          docker tag my-app:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-app:latest
+
+#      # Build and push Docker images: https://github.com/marketplace/actions/build-and-push-docker-images
+#      - name: Build and push Docker image
+#        id: push
+#        uses: docker/build-push-action@v6
+#        with:
+#          context: .
+#          push: true
+#          tags: ${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
