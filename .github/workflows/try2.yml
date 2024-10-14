@@ -32,7 +32,7 @@ jobs:
         run: mvn spring-boot:build-image -DskipTests
         env:
           REGISTRY: ghcr.io
-          IMAGE_NAME: ghcr.io/thisisme/${{ github.event.repository.name }}:${{ github.event.inputs.version || github.sha }}
+          IMAGE_NAME: ghcr.io/arcdz/${{ github.event.repository.name }}:${{ github.event.inputs.version || github.sha }}
           JAVA_VERSION: '21'
           DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}  # Utilizează token-ul implicit de GitHub
           DOCKER_USERNAME: ${{ github.actor }}           # Utilizatorul curent GitHub
