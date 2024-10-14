@@ -1,0 +1,10 @@
+services:
+  app:
+    container_name: pkgd
+    image: arcdz/pkgd:latest
+    ports:
+      - 9002:9002
+    environment:
+      SERVER_SERVLET_CONTEXT_PATH: "/test"
+      SERVER_PORT: 9002
+      APP_MESSAGE: "Message Test"
