@@ -47,5 +47,6 @@ jobs:
       - name: Build and push Docker image to GHCR
         run: mvn spring-boot:build-image -DskipTests
 
+      # Push Docker image to GitHub Container Registry
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.actor }}/${{ github.event.repository.name }}:${{ github.event.inputs.version || github.sha }}
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
