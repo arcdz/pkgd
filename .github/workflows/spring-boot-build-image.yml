@@ -1,57 +1,62 @@
-name: Build Spring Boot Image
-# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Docker - Build Spring Boot Image
+
 on:
   push:
-    branches:
-      - main
+    branches: ['release']
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-image:
+  build-deploy:
     runs-on: ubuntu-latest
 
-    steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v4
+    # Sets the permissions granted to the GITHUB_TOKEN for the actions in this job.
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
-      # Step 2: Set up JDK 21
+    steps:
+      # Checkout: https://github.com/marketplace?type=actions:
+      - name: Checkout
+        uses: actions/checkout@v4z
+
+      ## JAVA & maven related:
+      # Setup JAVA JDK: https://github.com/marketplace/actions/setup-java-jdk
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # Alternative: 'zulu'
           java-version: '21'
 
-      # # Step 3: Cache Maven dependencies
-      # - name: Cache Maven packages
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.m2
-      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      #     restore-keys: ${{ runner.os }}-maven
-
-      # Step 4: Build the project and create Docker image
+      # Build the project and create Docker image
       - name: Build with Maven and create Docker image
         run: mvn spring-boot:build-image
 
-      # (Optional) Step 5: Push the Docker image to a registry
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      # Step 5: Push the Docker image to ghcr.io
-      - name: Log in to Docker ghcr.io
+      # Docker Login: https://github.com/marketplace/actions/docker-login
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Docker Metadata action: https://github.com/marketplace/actions/docker-metadata-action
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-
-      - name: Push Docker image
-        run: |
-          docker tag arcdz/pkgd:latest arcdz/pkgd:${{ github.sha }}
-          docker push arcdz/pkgd:${{ github.sha }}
-          docker push arcdz/pkgd:latest
+      # Build and push Docker images: https://github.com/marketplace/actions/build-and-push-docker-images
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
