@@ -28,17 +28,24 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
+      # Docker Login: https://github.com/marketplace/actions/docker-login
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Docker Metadata action: https://github.com/marketplace/actions/docker-metadata-action
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      # Build the project and create Docker image
       - name: Build and push Docker image to GHCR
         run: mvn spring-boot:build-image -DskipTests
-        env:
-          REGISTRY: ghcr.io
-          IMAGE_NAME: ghcr.io/arcdz/${{ github.event.repository.name }}:${{ github.event.inputs.version || github.sha }}
-          JAVA_VERSION: '21'
-          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}  # Utilizează token-ul implicit de GitHub
-          DOCKER_USERNAME: ${{ github.actor }}           # Utilizatorul curent GitHub
-
-      - name: Log in to GitHub Container Registry
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push Docker image
         run: docker push $IMAGE_NAME
