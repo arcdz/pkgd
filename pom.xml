@@ -67,10 +67,10 @@
                         </exclude>
                     </excludes>
                     <image>
-                        <name>ghcr.io/arcdz/${project.artifactId}</name>
+                        <builder>paketobuildpacks/builder-jammy-java-tiny</builder>
+<!--                        <name>ghcr.io/arcdz/${project.artifactId}</name>-->
 <!--                        <name>ghcr.io/arcdz/${project.artifactId}:${project.version}</name>-->
 <!--                        <publish>true</publish>-->
-                        <builder>paketobuildpacks/builder-jammy-java-tiny</builder>
                         <env>
                             <BP_JVM_VERSION>21</BP_JVM_VERSION>
                         </env>
