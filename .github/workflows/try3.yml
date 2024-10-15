@@ -58,7 +58,7 @@ jobs:
 
       # Push Docker image to GitHub Container Registry
       - name: Push Docker image
-        run: docker push ${{ env.DOCKER_METADATA_OUTPUT_TAGS }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
+        run: docker push ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}
 
 #      # Build and push
 #      - name: Build and push
