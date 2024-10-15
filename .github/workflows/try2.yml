@@ -10,6 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  DOCKER_IMAGE: ${{ env.REGISTRY }}/${{ github.actor }}/${{ github.repository }}
 
 jobs:
   build:
@@ -41,12 +42,22 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.DOCKER_IMAGE }}
 
       # Build the project and create Docker image
-      - name: Build and push Docker image to GHCR
-        run: mvn spring-boot:build-image -DskipTests
+      - name: Build Docker image
+        run: |
+          output=$(mvn spring-boot:build-image -DskipTests)
+          echo "$output"
+          
+
+      - name: Set tag environment variable
+        run: echo "TAG=$(date '+%y%m%d%H%M%S')" >> $GITHUB_ENV
+
+      # Re-tag Docker image with new (name and) version
+      - name: Re-tag Docker image
+        run: docker tag ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
 
       # Push Docker image to GitHub Container Registry
       - name: Push Docker image
-        run: docker push ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        run: docker push ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}

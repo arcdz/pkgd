@@ -67,7 +67,8 @@
                         </exclude>
                     </excludes>
                     <image>
-                        <name>ghcr.io/arcdz/${project.artifactId}:${project.version}</name>
+                        <name>ghcr.io/arcdz/${project.artifactId}</name>
+<!--                        <name>ghcr.io/arcdz/${project.artifactId}:${project.version}</name>-->
 <!--                        <publish>true</publish>-->
                         <builder>paketobuildpacks/builder-jammy-java-tiny</builder>
                         <env>
