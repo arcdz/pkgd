@@ -56,7 +56,9 @@ jobs:
       # Define DOCKER IMAGE name
       - name: Set tag environment variable
         id: set_docker_tag
-        run: echo "TAG=$(date '+%y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: |
+          echo "DOCKER_TAG=$(date '+%y%m%d%H%M%S')" >> $GITHUB_ENV
+          echo $DOCKER_TAG
 
       # Print vars
       - name: Print vars
