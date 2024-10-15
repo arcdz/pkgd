@@ -10,7 +10,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  DOCKER_IMAGE: ${{ env.REGISTRY }}/${{ github.actor }}/${{ github.repository }}
+#  DOCKER_IMAGE: "${{ env.REGISTRY }}/${{ github.actor }}/${{ github.repository }}"
+
 
 jobs:
   build:
@@ -37,6 +38,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Define DOCKER IMAGE
+      - name: Set DOCKER_IMAGE
+        id: set_docker_image
+        run: echo "DOCKER_IMAGE=${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}" >> $GITHUB_ENV
+
       # Docker Metadata action: https://github.com/marketplace/actions/docker-metadata-action
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -50,7 +56,7 @@ jobs:
           output=$(mvn spring-boot:build-image -DskipTests)
           echo "$output"
           
-
+      # Define DOCKER IMAGE name
       - name: Set tag environment variable
         run: echo "TAG=$(date '+%y%m%d%H%M%S')" >> $GITHUB_ENV
 
