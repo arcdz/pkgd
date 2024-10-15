@@ -9,8 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-#  DOCKER_IMAGE: "${{ env.REGISTRY }}/${{ github.actor }}/${{ github.repository }}"
+  IMAGE_NAME: ${{ github.repository }}  #arcdz/pkgd
 
 
 jobs:
@@ -41,7 +40,7 @@ jobs:
       # Define DOCKER IMAGE
       - name: Set DOCKER_IMAGE
         id: set_docker_image
-        run: echo "DOCKER_IMAGE=${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}" >> $GITHUB_ENV
+        run: echo "DOCKER_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" >> $GITHUB_ENV
 
       # Docker Metadata action: https://github.com/marketplace/actions/docker-metadata-action
       - name: Extract metadata (tags, labels) for Docker
@@ -56,6 +55,7 @@ jobs:
           
       # Define DOCKER IMAGE name
       - name: Set tag environment variable
+        id: set_docker_tag
         run: echo "TAG=$(date '+%y%m%d%H%M%S')" >> $GITHUB_ENV
 
       # Print vars
@@ -68,4 +68,4 @@ jobs:
 
       # Push Docker image to GitHub Container Registry
       - name: Push Docker image
-        run: docker push ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
+        run: docker push ${{ env.DOCKER_METADATA_OUTPUT_TAGS }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
