@@ -62,7 +62,7 @@ jobs:
 
       # Re-tag Docker image with new (name and) version
       - name: Re-tag Docker image
-        run: docker tag ${{ env.DOCKER_IMAGE }} ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
+        run: docker tag ${{ env.DOCKER_IMAGE }}:main ${{ env.DOCKER_IMAGE }}:${{ env.TAG }}
 
       # Push Docker image to GitHub Container Registry
       - name: Push Docker image
