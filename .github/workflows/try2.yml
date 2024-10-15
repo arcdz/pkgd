@@ -52,13 +52,15 @@ jobs:
 
       # Build the project and create Docker image
       - name: Build Docker image
-        run: |
-          output=$(mvn spring-boot:build-image -DskipTests)
-          echo "$output"
+        run: mvn spring-boot:build-image -DskipTests
           
       # Define DOCKER IMAGE name
       - name: Set tag environment variable
         run: echo "TAG=$(date '+%y%m%d%H%M%S')" >> $GITHUB_ENV
+
+      # Print vars
+      - name: Print vars
+        run: echo $GITHUB_ENV
 
       # Re-tag Docker image with new (name and) version
       - name: Re-tag Docker image
