@@ -55,7 +55,7 @@ jobs:
       # Build the project and create Docker image
       - name: Build Docker image
         run: |
-          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}:${{ DOCKER_METADATA_OUTPUT_VERSION }}
+          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}
 
 
 #      # Build and push
