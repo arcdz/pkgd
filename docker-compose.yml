@@ -1,7 +1,7 @@
 services:
   app:
     container_name: pkgd
-    image: ghcr.io/arcdz/pkgd:main
+    image: ghcr.io/arcdz/pkgd:0.0.1
     ports:
       - 9002:9002
     environment:
