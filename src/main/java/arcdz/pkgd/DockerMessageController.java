@@ -15,4 +15,9 @@ public class DockerMessageController {
     public String getMessage() {
         return "{ 'message': '" + appProps.message() + "'}";
     }
+
+    @GetMapping("/hello2")
+    public String getMessage2() {
+        return "{ 'message': '" + appProps.message() + "'}";
+    }
 }
