@@ -56,9 +56,8 @@ jobs:
       # Debugging step: Print meta outputs
       - name: Print Docker tags
         run: |
-          echo "Raw outputs:" > outputs.txt
-          echo "${{ steps.meta.outputs }}" >> outputs.txt
-          cat outputs.txt
+          echo "Docker tags:"
+          echo "${{ toJson(steps.meta.outputs) }}"
       
       
 
