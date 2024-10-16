@@ -54,10 +54,16 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       # Debugging step: Print meta outputs
-      - name: Print meta outputs
+      - name: Print Docker tags
         run: |
-          echo "Docker tags:"
-          echo "${{ steps.meta.outputs }}" | jq '.'
+          echo "Raw outputs:"
+          echo "${{ toJson(steps.meta.outputs) }}" > output.json
+          if [ -s output.json ]; then
+            echo "Docker tags:"
+            cat output.json | jq '.'
+          else
+            echo "No outputs or invalid JSON."
+          fi
       
 
       # Docker Login: https://github.com/marketplace/actions/docker-login
