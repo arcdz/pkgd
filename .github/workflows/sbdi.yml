@@ -56,14 +56,10 @@ jobs:
       # Debugging step: Print meta outputs
       - name: Print Docker tags
         run: |
-          echo "Raw outputs:"
-          echo "${{ toJson(steps.meta.outputs) }}" > output.json
-          if [ -s output.json ]; then
-            echo "Docker tags:"
-            cat output.json | jq '.'
-          else
-            echo "No outputs or invalid JSON."
-          fi
+          echo "Raw outputs:" > outputs.txt
+          echo "${{ steps.meta.outputs }}" >> outputs.txt
+          cat outputs.txt
+      
       
 
       # Docker Login: https://github.com/marketplace/actions/docker-login
