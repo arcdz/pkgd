@@ -71,12 +71,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
 #      # Build the project and create Docker image
-#      - name: Build and Push Docker Image
-#        run: |
-#          mvn spring-boot:build-image \
-#              -DskipTests \
-#              -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}:temp-tag \
-#              -Dspring-boot.build-image.tags=stable,latest,${{ github.sha }} \
+      - name: Build and Push Docker Image
+        run: |
+          mvn spring-boot:build-image \
+              -DskipTests \
+              -Dspring-boot.build-image.imageName=${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.meta.outputs.labels.version }} \
+              -Dspring-boot.build-image.tags=${{ steps.meta.outputs.tags }} \
 #              -Dspring-boot.build-image.build.labels.maintainer="dev@example.com" \
 #              -Dspring-boot.build-image.build.labels.description="This is myapp image built with Spring Boot" \
 #              -Dspring-boot.build-image.build.labels.version="${{ github.sha }}" \
