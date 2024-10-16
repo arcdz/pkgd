@@ -51,7 +51,9 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
       # Debugging step: Print the generated tags
       - name: Print Docker tags
-        run: echo ${{ steps.meta.outputs.tags }}
+        run: |
+          echo "Generated tags:"
+          echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n'
 
       # Docker Login: https://github.com/marketplace/actions/docker-login
       - name: Login to GitHub Container Registry
