@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "${{ steps.meta.outputs.version }}"
           echo "${{ steps.meta.outputs.tags }}"
-          echo "${{ steps.meta.outputs.labels.'org.opencontainers.image.created' }}"
+          echo "${{ steps.meta.outputs.labels['org.opencontainers.image.created'] }}"
           echo "${{ steps.meta.outputs.labels.org.opencontainers.image.description }}"
           echo "${{ steps.meta.outputs.labels.org.opencontainers.image.licenses }}"
       
